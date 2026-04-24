@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 0 auto; background: #fff0f5; padding: 20px; border-radius: 10px; border: 1px solid #ffb6c1;">
+    <h2 style="color: #ff1493; margin-top: 0;">📝 Новый отзыв</h2>
+    <p style="color: #666;">Товар: <strong>{{ product.title }}</strong></p>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">{{ form.text.label }}:</label>
+            {{ form.text }}
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">{{ form.rating.label }}:</label>
+            {{ form.rating }}
+        </div>
+
+        <div style="margin-top: 20px;">
+            <button type="submit" style="background: #ff1493; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                Отправить отзыв 🎀
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

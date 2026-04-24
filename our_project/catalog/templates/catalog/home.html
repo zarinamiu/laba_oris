@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}PinkStore - Главная{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <h1>🌸 Добро пожаловать в PinkStore!</h1>
+        <p>Самые милые товары для тебя 💗</p>
+        <a href="{% url 'catalog:product_list' %}" class="btn btn-pink btn-large">
+            Перейти в каталог
+        </a>
+    </div>
+</section>
+
+<section class="featured-products">
+    <h2>⭐ Популярные товары</h2>
+
+    <div class="products-grid">
+        {% for product in products %}
+            <div class="product-card">
+                <div class="product-image">
+                    {% if product.image_path %}
+                        <img src="{% static product.image_path %}" alt="{{ product.title }}">
+                    {% else %}
+                        <!-- SVG-заглушка -->
+                        <div class="no-image-placeholder">
+                            <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="200" height="200" fill="#ffeef2"/>
+                                <text x="100" y="80" text-anchor="middle" font-size="50">🌸</text>
+                                <text x="100" y="130" text-anchor="middle" font-size="14" fill="#d63384" font-weight="bold">PinkStore</text>
+                                <text x="100" y="150" text-anchor="middle" font-size="10" fill="#888">Нет фото</text>
+                            </svg>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="product-content">
+                    <h3 class="product-title">
+                        <a href="{% url 'catalog:product_detail' product.id %}">
+                            {{ product.title }}
+                        </a>
+                    </h3>
+
+                    <div class="product-price">{{ product.price }} ₽</div>
+
+                    <a href="{% url 'catalog:add_to_cart' product.id %}" class="btn btn-pink">
+                        🛒 В корзину
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="view-all" style="text-align: center; margin-top: 30px;">
+        <a href="{% url 'catalog:product_list' %}" class="btn btn-outline-pink btn-large">
+            Смотреть все товары →
+        </a>
+    </div>
+</section>
+{% endblock %}

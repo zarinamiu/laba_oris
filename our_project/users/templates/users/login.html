@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="max-width: 450px; margin: 0 auto; padding: 30px;">
+    <h2 style="text-align: center; color: #d63384; margin-bottom: 30px;">🎀 Вход в аккаунт</h2>
+
+    <form method="POST" style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(214, 51, 132, 0.1);">
+        {% csrf_token %}
+
+        <div style="margin-bottom: 20px;">
+            <label for="username" style="display: block; margin-bottom: 8px; color: #6c757d; font-weight: 500;">
+                👤 Имя пользователя
+            </label>
+            <input type="text" name="username" id="username" required
+                   style="width: 100%; padding: 12px; border: 2px solid #f8bbd9; border-radius: 8px; font-size: 16px; box-sizing: border-box;"
+                   placeholder="Введите имя пользователя">
+        </div>
+
+        <div style="margin-bottom: 25px;">
+            <label for="password" style="display: block; margin-bottom: 8px; color: #6c757d; font-weight: 500;">
+                🔒 Пароль
+            </label>
+            <input type="password" name="password" id="password" required
+                   style="width: 100%; padding: 12px; border: 2px solid #f8bbd9; border-radius: 8px; font-size: 16px; box-sizing: border-box;"
+                   placeholder="Введите пароль">
+        </div>
+
+        <button type="submit" style="width: 100%; padding: 14px; background: linear-gradient(135deg, #d63384, #e91e63); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer;">
+            Войти 🎀
+        </button>
+
+        <p style="text-align: center; margin-top: 20px; color: #6c757d;">
+            Нет аккаунта?
+            <a href="{% url 'users:register' %}" style="color: #d63384; text-decoration: none; font-weight: 600;">
+                Зарегистрироваться
+            </a>
+        </p>
+
+        <p style="text-align: center; margin-top: 8px; font-size: 14px;">
+            Забыли пароль?
+            <a href="{% url 'users:password_reset' %}" style="color: #ff1493; text-decoration: none; font-weight: 600;">
+                Сбросить
+            </a>
+        </p>
+    </form>
+</div>
+{% endblock %}

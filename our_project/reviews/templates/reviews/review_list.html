@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto;">
+    <h2 style="color: #ff1493;">📝 Все отзывы</h2>
+
+    {% for review in reviews %}
+        <div style="background: #fff0f5; padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #ffb6c1;">
+            <p><strong>{{ review.user.username }}</strong> - {{ review.created_at|date:"d.m.Y H:i" }}</p>
+            <p><strong>Товар:</strong> {{ review.product.title }}</p>
+            <p><strong>Оценка:</strong>
+                {% for i in "12345" %}
+                    {% if forloop.counter <= review.rating %}⭐{% else %}☆{% endif %}
+                {% endfor %}
+            </p>
+            <p>{{ review.text }}</p>
+        </div>
+    {% empty %}
+        <p style="text-align: center; color: #999;">Пока нет отзывов 😢</p>
+    {% endfor %}
+</div>
+{% endblock %}

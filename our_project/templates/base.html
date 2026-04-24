@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PinkStore | Мой Магазин</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="{% if request.COOKIES.theme == 'dark' %}dark-theme{% else %}light-theme{% endif %}">
+    <header>
+        <div class="logo">🌸 PinkStore</div>
+        <nav>
+            <a href="{% url 'home' %}" class="nav-link">Главная</a>
+            <a href="{% url 'catalog:product_list' %}" class="nav-link">Каталог</a>
+            <a href="{% url 'catalog:cart_view' %}" class="nav-link">Корзина</a>
+
+            <a href="{% url 'catalog:toggle_theme' %}" class="nav-link" style="margin-left: 20px;">
+                {% if request.COOKIES.theme == 'dark' %}
+                    Светлая тема
+                {% else %}
+                    Тёмная тема
+                {% endif %}
+            </a>
+
+            {% if request.user.is_authenticated %}
+                <span style="margin-left: 20px;">Привет, <strong>{{ request.user.username }}</strong>! 🌸</span>
+                <a href="{% url 'users:profile' %}" class="nav-link">Личный кабинет</a>
+
+                <form action="{% url 'users:logout' %}" method="post" style="display: inline; margin-left: 10px;">
+                    {% csrf_token %}
+                    <button type="submit" style="background: none; border: 1px solid #ff1493; color: #ff1493; padding: 5px 10px; cursor: pointer; border-radius: 5px;">
+                        Выйти
+                    </button>
+                </form>
+            {% else %}
+                <a href="{% url 'users:login' %}" class="nav-link" style="margin-left: 20px;">Войти</a>
+                <a href="{% url 'users:register' %}" class="nav-link">Регистрация</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main>
+        {% if messages %}
+            <div style="max-width: 900px; margin: 20px auto;">
+                {% for message in messages %}
+                    <div style="padding: 12px; margin-bottom: 10px; border-radius: 8px;
+                        {% if message.tags == 'error' %}
+                            background: #fce4ec; color: #c62828; border: 1px solid #f48fb1;
+                        {% elif message.tags == 'success' %}
+                            background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7;
+                        {% else %}
+                            background: #e3f2fd; color: #1565c0;
+                        {% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2026 PinkStore. Все права защищены.</p>
+    </footer>
+</body>
+</html>

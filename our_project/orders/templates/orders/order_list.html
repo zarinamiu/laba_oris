@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Список заказов</h2>
+
+    {% if orders %}
+        <div class="orders-list">
+            {% for order in orders %}
+                <div class="order-card">
+                    <h3>Заказ #{{ order.id }}</h3>
+                    <p><strong>Пользователь:</strong> {{ order.user.username }}</p>
+                    <p><strong>Дата создания:</strong> {{ order.created_at }}</p>
+                    <p><strong>Статус оплаты:</strong>
+                        {% if order.is_paid %}
+                            <span style="color: green;">Оплачен</span>
+                        {% else %}
+                            <span style="color: red;">Не оплачен</span>
+                        {% endif %}
+                    </p>
+
+                    {% if order.items.all %}
+                        <h4>Товары в заказе:</h4>
+                        <ul>
+                            {% for item in order.items.all %}
+                                <li>{{ item.quantity }} x {{ item.product.title }} - {{ item.price }} ₽</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>Заказов пока нет.</p>
+    {% endif %}
+{% endblock %}

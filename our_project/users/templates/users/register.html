@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="max-width: 450px; margin: 0 auto; padding: 30px;">
+    <h2 style="text-align: center; color: #d63384; margin-bottom: 30px;">🌸 Регистрация</h2>
+    
+    {% if messages %}
+        {% for message in messages %}
+        <div style="padding: 12px; margin-bottom: 15px; border-radius: 8px; 
+                    {% if message.tags == 'error' %}background: #fce4ec; color: #c62828; border: 1px solid #f48fb1;
+                    {% elif message.tags == 'success' %}background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7;
+                    {% else %}background: #e3f2fd; color: #1565c0;{% endif %}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    {% endif %}
+    
+    {% if form.errors %}
+    <div style="background: #fce4ec; padding: 15px; border-radius: 8px; margin-bottom: 20px; color: #c62828;">
+        {% for field in form %}
+            {% for error in field.errors %}
+                <p style="margin: 5px 0;">• {{ error }}</p>
+            {% endfor %}
+        {% endfor %}
+        {% for error in form.non_field_errors %}
+            <p style="margin: 5px 0;">• {{ error }}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    <form method="POST" style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(214, 51, 132, 0.1);">
+        {% csrf_token %}
+        
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 8px; color: #6c757d; font-weight: 500;">👤 Имя пользователя</label>
+            {{ form.username }}
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 8px; color: #6c757d; font-weight: 500;">📧 Email</label>
+            {{ form.email }}
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 8px; color: #6c757d; font-weight: 500;">🔒 Пароль</label>
+            {{ form.password1 }}
+        </div>
+        
+        <div style="margin-bottom: 25px;">
+            <label style="display: block; margin-bottom: 8px; color: #6c757d; font-weight: 500;">🔒 Подтверждение пароля</label>
+            {{ form.password2 }}
+        </div>
+        
+        <button type="submit" style="width: 100%; padding: 14px; background: linear-gradient(135deg, #d63384, #e91e63); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer;">
+            Зарегистрироваться 🎀
+        </button>
+        
+        <p style="text-align: center; margin-top: 20px; color: #6c757d;">
+            Уже есть аккаунт? <a href="{% url 'users:login' %}" style="color: #d63384; text-decoration: none; font-weight: 600;">Войти</a>
+        </p>
+    </form>
+</div>
+{% endblock %}

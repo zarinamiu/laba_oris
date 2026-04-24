@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 0 auto; background: #fff0f5; padding: 20px; border-radius: 10px; border: 1px solid #ffb6c1;">
+    <h2 style="color: #ff1493; margin-top: 0;">✏️ Редактирование отзыва</h2>
+    <p style="color: #666;">Товар: <strong>{{ review.product.title }}</strong></p>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">{{ form.text.label }}:</label>
+            {{ form.text }}
+            {% if form.text.errors %}
+                <div style="color: red; margin-top: 5px;">
+                    {% for error in form.text.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">{{ form.rating.label }}:</label>
+            {{ form.rating }}
+            {% if form.rating.errors %}
+                <div style="color: red; margin-top: 5px;">
+                    {% for error in form.rating.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <div style="margin-top: 20px; display: flex; gap: 15px;">
+            <button type="submit" style="background: #ff1493; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
+                Сохранить изменения 🎀
+            </button>
+
+            <a href="{% url 'catalog:product_detail' review.product.id %}" style="padding: 10px 20px; color: #ff1493; text-decoration: none; border: 1px solid #ffb6c1; border-radius: 5px;">
+                Отмена
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

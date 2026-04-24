@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 50px auto; padding: 20px; border: 1px solid #ff1493; border-radius: 10px;">
+    <h2 style="color: #ff1493;">🌸 Личный кабинет</h2>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div style="background: {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}#d4edda{% else %}#f8d7da{% endif %};
+                        color: {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}#155724{% else %}#721c24{% endif %};
+                        padding: 10px; border-radius: 5px; margin-bottom: 15px;">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Информация о пользователе -->
+    <div style="background: #fff0f5; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+        <p><strong>Имя пользователя:</strong> {{ request.user.username }}</p>
+        <p><strong>Email:</strong> {{ request.user.email|default:"Не указан" }}</p>
+        <p><strong>Телефон:</strong> {{ profile.phone|default:"Не указан" }}</p>
+        <p><strong>Адрес:</strong> {{ profile.address|default:"Не указан" }}</p>
+    </div>
+
+    <hr style="border: 1px solid #ffb6c1; margin: 20px 0;">
+
+    <!-- Форма редактирования -->
+    <h3 style="color: #ff1493;">✏️ Редактировать профиль</h3>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">{{ form.phone.label }}:</label>
+            {{ form.phone }}
+            {% if form.phone.errors %}
+                <div style="color: red; margin-top: 5px;">
+                    {% for error in form.phone.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">{{ form.address.label }}:</label>
+            {{ form.address }}
+            {% if form.address.errors %}
+                <div style="color: red; margin-top: 5px;">
+                    {% for error in form.address.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <button type="submit" style="background: #ff1493; color: white; width: 100%; padding: 10px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">
+            Сохранить изменения 🎀
+        </button>
+    </form>
+</div>
+{% endblock %}
