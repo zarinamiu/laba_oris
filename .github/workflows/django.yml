@@ -10,7 +10,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    # Это указывает GitHub Actions выполнять ВСЕ команды внутри папки our_project
     defaults:
       run:
         working-directory: ./our_project
@@ -36,7 +35,6 @@ jobs:
           - 6379:6379
 
     steps:
-      # Этот шаг всегда выполняется в корне репозитория (не меняйте его)
       - name: Checkout code
         uses: actions/checkout@v4
 
