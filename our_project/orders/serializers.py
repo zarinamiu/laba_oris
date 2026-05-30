@@ -61,7 +61,7 @@ class OrderCreateSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         items_data = validated_data.pop('items')
-        user = self.context['request'].user
+        user = validated_data.pop('user')
 
         order = Order.objects.create(user=user, **validated_data)
 
@@ -70,6 +70,7 @@ class OrderCreateSerializer(serializers.ModelSerializer):
             quantity = item_data['quantity']
 
             if product.stock < quantity:
+                order.delete()
                 raise serializers.ValidationError(
                     f"Недостаточно товара '{product.title}' на складе. Доступно: {product.stock}"
                 )
@@ -85,5 +86,4 @@ class OrderCreateSerializer(serializers.ModelSerializer):
             product.save()
 
         order.calculate_total()
-
         return order

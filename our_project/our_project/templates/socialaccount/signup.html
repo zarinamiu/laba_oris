@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 0 auto; padding: 30px;">
+    <h2 style="text-align: center; color: #d63384; margin-bottom: 30px;">🌸 Подтверждение входа через GitHub</h2>
+
+    <div style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(214, 51, 132, 0.1);">
+        <p style="text-align: center; margin-bottom: 20px; color: #6c757d;">
+            Вы входите через GitHub аккаунт: <strong style="color: #24292e;">{{ account.extra_data.login }}</strong>
+        </p>
+
+        {% if account.extra_data.email %}
+        <p style="text-align: center; margin-bottom: 20px; color: #6c757d;">
+            Email: <strong style="color: #24292e;">{{ account.extra_data.email }}</strong>
+        </p>
+        {% endif %}
+
+        {% if form.errors %}
+        <div style="background: #fce4ec; padding: 15px; border-radius: 8px; margin-bottom: 20px; color: #c62828;">
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <p style="margin: 5px 0;">• {{ error }}</p>
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+                <p style="margin: 5px 0;">• {{ error }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+            {% if not account.extra_data.email %}
+            <div style="margin-bottom: 20px;">
+                <label for="email" style="display: block; margin-bottom: 8px; color: #6c757d; font-weight: 500;">
+                    📧 Email *
+                </label>
+                <input type="email"
+                       name="email"
+                       id="email"
+                       required
+                       style="width: 100%; padding: 12px; border: 2px solid #f8bbd9; border-radius: 8px; font-size: 16px; box-sizing: border-box;"
+                       placeholder="Введите ваш email">
+            </div>
+            {% endif %}
+
+            <div style="margin-bottom: 20px;">
+                <label for="username" style="display: block; margin-bottom: 8px; color: #6c757d; font-weight: 500;">
+                    👤 Имя пользователя *
+                </label>
+                <input type="text"
+                       name="username"
+                       id="username"
+                       required
+                       value="{{ account.extra_data.login|default:'' }}"
+                       style="width: 100%; padding: 12px; border: 2px solid #f8bbd9; border-radius: 8px; font-size: 16px; box-sizing: border-box;"
+                       placeholder="Придумайте имя пользователя">
+            </div>
+
+            <p style="color: #888; font-size: 14px; margin-bottom: 20px; text-align: center;">
+                * Если у вас уже есть аккаунт с таким email, войдите через форму входа
+            </p>
+
+            <button type="submit" style="width: 100%; padding: 14px; background: linear-gradient(135deg, #d63384, #e91e63); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; margin-bottom: 15px;">
+                Подтвердить и войти 🎀
+            </button>
+        </form>
+
+        <hr style="margin: 25px 0; border-color: #ffc1e3;">
+
+        <p style="text-align: center; color: #6c757d; margin-bottom: 10px;">
+            Уже есть аккаунт?
+        </p>
+
+        <a href="{% url 'users:login' %}"
+           style="display: block; text-align: center; background: #24292e; color: white; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; transition: all 0.3s;">
+            🐱 Войти с существующим аккаунтом
+        </a>
+    </div>
+</div>
+{% endblock %}

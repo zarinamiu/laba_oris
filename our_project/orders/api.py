@@ -1,4 +1,4 @@
-from rest_framework import generics, permissions
+from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from drf_yasg.utils import swagger_auto_schema
 from .models import Order
@@ -11,7 +11,7 @@ class OrderListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Order.objects.filter(user=self.request.user).prefetch_related('items__product')
+        return Order.objects.filter(user=self.request.user).prefetch_related('items__product').order_by('-created_at')  # Добавлен order_by
 
     @swagger_auto_schema(
         operation_description="Получить список заказов текущего пользователя",
@@ -29,7 +29,7 @@ class OrderDetailView(generics.RetrieveAPIView):
     lookup_field = 'id'
 
     def get_queryset(self):
-        return Order.objects.filter(user=self.request.user).prefetch_related('items__product')
+        return Order.objects.filter(user=self.request.user).prefetch_related('items__product').order_by('-created_at')  # Добавлен order_by
 
     @swagger_auto_schema(
         operation_description="Получить информацию о заказе по ID",
@@ -63,7 +63,7 @@ class OrderAllListView(generics.ListAPIView):
     """API: Список всех заказов (для админов)"""
     serializer_class = OrderSerializer
     permission_classes = [AllowAny]  # Можно заменить на IsAdminUser
-    queryset = Order.objects.all().prefetch_related('items__product').select_related('user')
+    queryset = Order.objects.all().prefetch_related('items__product').select_related('user').order_by('-created_at')  # Добавлен order_by
 
     @swagger_auto_schema(
         operation_description="Получить список всех заказов",

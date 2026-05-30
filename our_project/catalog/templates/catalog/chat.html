@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="max-width: 700px; margin: 0 auto; padding: 20px;">
+    <h2 style="text-align: center; color: #d63384; margin-bottom: 20px;">
+        💬 Чат PinkStore: {{ room_name }}
+    </h2>
+
+    <div style="text-align: center; margin-bottom: 20px; color: #6c757d;">
+        Комната: <strong>{{ room_name }}</strong><br>
+        Пользователь: <strong>{{ request.user.username }}</strong>
+    </div>
+
+    <div id="chat-log" style="height: 350px; border: 2px solid #f8bbd9; border-radius: 12px; padding: 15px; overflow-y: auto; margin-bottom: 15px; background: white; color: #000; box-shadow: 0 4px 15px rgba(214, 51, 132, 0.1);">
+    </div>
+
+    <div style="display: flex; gap: 10px;">
+        <input
+            id="chat-message-input"
+            type="text"
+            placeholder="Введите сообщение..."
+            style="flex-grow: 1; padding: 12px; border: 2px solid #f8bbd9; border-radius: 8px; font-size: 16px;"
+        >
+        <button
+            id="chat-message-submit"
+            style="background: linear-gradient(135deg, #d63384, #e91e63); color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: 600;"
+        >
+            Отправить
+        </button>
+    </div>
+
+    <div style="margin-top: 25px; text-align: center;">
+        <a href="{% url 'catalog:chat_room' 'general' %}" style="margin-right: 10px; color: #d63384; text-decoration: none; font-weight: 600;">general</a>
+        <a href="{% url 'catalog:chat_room' 'support' %}" style="margin-right: 10px; color: #d63384; text-decoration: none; font-weight: 600;">support</a>
+        <a href="{% url 'catalog:chat_room' 'beauty' %}" style="color: #d63384; text-decoration: none; font-weight: 600;">beauty</a>
+    </div>
+</div>
+
+{{ room_name|json_script:"room-name" }}
+
+<script>
+    const roomName = JSON.parse(document.getElementById('room-name').textContent);
+
+    const wsScheme = window.location.protocol === 'https:' ? 'wss' : 'ws';
+    const chatSocket = new WebSocket(
+        wsScheme + '://' + window.location.host + '/ws/chat/' + roomName + '/'
+    );
+
+    chatSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        const chatLog = document.querySelector('#chat-log');
+
+        const messageElement = document.createElement('div');
+        messageElement.style.marginBottom = '10px';
+        messageElement.style.padding = '8px 10px';
+        messageElement.style.borderRadius = '8px';
+        messageElement.style.background = '#fff0f6';
+
+        if (data.message.includes(':')) {
+            const parts = data.message.split(':');
+            const author = parts.shift();
+            const text = parts.join(':').trim();
+            messageElement.innerHTML = '<strong style="color:#d63384;">' + author + ':</strong> ' + text;
+        } else {
+            messageElement.textContent = data.message;
+        }
+
+        chatLog.appendChild(messageElement);
+        chatLog.scrollTop = chatLog.scrollHeight;
+    };
+
+    chatSocket.onclose = function(e) {
+        console.error('Чат неожиданно закрылся');
+    };
+
+    chatSocket.onerror = function(e) {
+        console.error('Ошибка WebSocket', e);
+    };
+
+    document.querySelector('#chat-message-submit').onclick = function(e) {
+        const messageInputDom = document.querySelector('#chat-message-input');
+        const message = messageInputDom.value.trim();
+
+        if (!message) {
+            return;
+        }
+
+        chatSocket.send(JSON.stringify({
+            'message': message
+        }));
+
+        messageInputDom.value = '';
+        messageInputDom.focus();
+    };
+
+    document.querySelector('#chat-message-input').onkeyup = function(e) {
+        if (e.key === 'Enter') {
+            document.querySelector('#chat-message-submit').click();
+        }
+    };
+</script>
+{% endblock %}

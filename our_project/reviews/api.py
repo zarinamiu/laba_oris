@@ -7,7 +7,7 @@ from .serializers import ReviewSerializer, ReviewCreateSerializer
 
 class ReviewListView(generics.ListAPIView):
     """API: Список всех отзывов"""
-    queryset = Review.objects.select_related('product', 'user').all()
+    queryset = Review.objects.select_related('product', 'user').all().order_by('-created_at')  # Добавлен order_by
     serializer_class = ReviewSerializer
     permission_classes = [AllowAny]
 
@@ -22,7 +22,7 @@ class ReviewListView(generics.ListAPIView):
 
 class ReviewDetailView(generics.RetrieveAPIView):
     """API: Детальная информация об отзыве"""
-    queryset = Review.objects.select_related('product', 'user').all()
+    queryset = Review.objects.select_related('product', 'user').all().order_by('-created_at')  # Добавлен order_by
     serializer_class = ReviewSerializer
     permission_classes = [AllowAny]
     lookup_field = 'id'

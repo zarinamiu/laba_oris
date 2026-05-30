@@ -4,4 +4,14 @@ psycopg2-binary==2.9.11
 sqlparse==0.5.5
 tzdata==2024.2
 Pillow==11.0.0
-
+python-dotenv
+daphne
+djangorestframework
+drf-yasg
+django-allauth
+dj-rest-auth
+channels
+requests
+djangorestframework-simplejwt
+pytest==8.3.4
+pytest-django==4.9.0

@@ -8,6 +8,7 @@ class Review(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор')
     text = models.TextField('Текст отзыва')
     rating = models.IntegerField('Оценка', default=5)
+    created_at = models.DateTimeField('Дата создания', auto_now_add=True)
 
     class Meta:
         verbose_name = 'Отзыв'

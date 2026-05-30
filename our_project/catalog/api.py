@@ -8,7 +8,7 @@ from .serializers import CategorySerializer, ProductSerializer, ProductListSeria
 
 class CategoryListView(generics.ListAPIView):
     """API: Список всех категорий"""
-    queryset = Category.objects.all()
+    queryset = Category.objects.all().order_by('id')  # Добавлен order_by
     serializer_class = CategorySerializer
     permission_classes = [AllowAny]
 
@@ -23,7 +23,7 @@ class CategoryListView(generics.ListAPIView):
 
 class CategoryDetailView(generics.RetrieveAPIView):
     """API: Детальная информация о категории"""
-    queryset = Category.objects.all()
+    queryset = Category.objects.all().order_by('id')  # Добавлен order_by
     serializer_class = CategorySerializer
     permission_classes = [AllowAny]
     lookup_field = 'id'
@@ -39,7 +39,7 @@ class CategoryDetailView(generics.RetrieveAPIView):
 
 class ProductListView(generics.ListAPIView):
     """API: Список всех товаров"""
-    queryset = Product.objects.select_related('category').all()
+    queryset = Product.objects.select_related('category').all().order_by('id')  # Добавлен order_by
     serializer_class = ProductListSerializer
     permission_classes = [AllowAny]
 
@@ -54,7 +54,7 @@ class ProductListView(generics.ListAPIView):
 
 class ProductDetailView(generics.RetrieveAPIView):
     """API: Детальная информация о товаре"""
-    queryset = Product.objects.select_related('category').all()
+    queryset = Product.objects.select_related('category').all().order_by('id')  # Добавлен order_by
     serializer_class = ProductSerializer
     permission_classes = [AllowAny]
     lookup_field = 'id'

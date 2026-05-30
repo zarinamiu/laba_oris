@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load socialaccount %}
 
 {% block content %}
 <div style="max-width: 450px; margin: 0 auto; padding: 30px;">
@@ -35,6 +36,19 @@
                 Зарегистрироваться
             </a>
         </p>
+
+        <hr style="margin: 30px 0; border-color: #ffc1e3;">
+
+        <p style="text-align: center; margin-bottom: 15px; color: #888;">
+            Или войдите через
+        </p>
+
+        <a href="{% provider_login_url 'github' %}"
+           class="btn btn-github"
+           style="display: block; text-align: center; background: #24292e; color: white; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; transition: all 0.3s;">
+            <span style="margin-right: 8px;">🐱</span>
+            Войти через GitHub
+        </a>
 
         <p style="text-align: center; margin-top: 8px; font-size: 14px;">
             Забыли пароль?

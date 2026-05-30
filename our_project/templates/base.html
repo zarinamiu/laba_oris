@@ -14,6 +14,7 @@
             <a href="{% url 'home' %}" class="nav-link">Главная</a>
             <a href="{% url 'catalog:product_list' %}" class="nav-link">Каталог</a>
             <a href="{% url 'catalog:cart_view' %}" class="nav-link">Корзина</a>
+            <a href="{% url 'catalog:chat_room' 'general' %}" class="nav-link">Чат</a>
 
             <a href="{% url 'catalog:toggle_theme' %}" class="nav-link" style="margin-left: 20px;">
                 {% if request.COOKIES.theme == 'dark' %}

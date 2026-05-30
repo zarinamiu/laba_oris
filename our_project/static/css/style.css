@@ -64,7 +64,7 @@ body.light-theme .container {
     background-color: white;
 }
 
-/* Тёмная тема */
+/* Тёмная тема — расширенная */
 body.dark-theme {
     background-color: #111111;
     color: #f5f5f5;
@@ -74,13 +74,45 @@ body.dark-theme .site-header {
     background-color: #222222;
 }
 
-body.dark-theme .container {
+/* Контейнеры, карточки товаров и корзины в темной теме */
+body.dark-theme .container,
+body.dark-theme .product-card,
+body.dark-theme .cart-item,
+body.dark-theme .cart-summary,
+body.dark-theme .empty-cart {
     background-color: #1b1b1b;
+    border-color: #444; /* делаем границы темнее */
+    color: #f5f5f5;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
 }
 
+/* Заголовки в темной теме (чтобы не сливались) */
+body.dark-theme .catalog-title,
+body.dark-theme .cart-title,
+body.dark-theme .product-title,
+body.dark-theme .cart-item-title {
+    color: #ff85c2; /* Нежно-розовый для темного фона */
+}
+
+/* Ссылки навигации */
 body.dark-theme a.nav-link {
     color: #ffb6c1;
 }
+
+/* Исправляем фон изображений, чтобы они не слепили */
+body.dark-theme .product-image,
+body.dark-theme .no-image-placeholder,
+body.dark-theme .no-image-placeholder-large {
+    background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+}
+
+/* Цена в темной теме */
+body.dark-theme .product-price,
+body.dark-theme .item-total,
+body.dark-theme .summary-row.total {
+    color: #ff69b4;
+}
+
 
 /* Остальные стили — общие */
 .site-header {

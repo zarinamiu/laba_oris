@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.http import JsonResponse
+from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+
 from .models import Category, Product
 
 
@@ -46,7 +49,6 @@ def add_to_cart(request, product_id):
     """Добавление товара в корзину"""
     product = get_object_or_404(Product, id=product_id)
 
-    # Инициализируем корзину в сессии
     if 'cart' not in request.session:
         request.session['cart'] = {}
 
@@ -58,7 +60,6 @@ def add_to_cart(request, product_id):
     else:
         cart[product_id_str] = 1
 
-    # ВАЖНО: сохраняем сессию!
     request.session.modified = True
 
     messages.success(request, f'🌸 {product.title} добавлен в корзину!')
@@ -82,7 +83,6 @@ def cart_view(request):
                 'total': item_total,
             })
         except Product.DoesNotExist:
-            # Если товар удалён из базы — убираем из корзины
             if product_id_str in request.session.get('cart', {}):
                 del request.session['cart'][product_id_str]
                 request.session.modified = True
@@ -125,8 +125,17 @@ def update_cart(request, product_id):
 
 
 def toggle_theme(request):
-    """Переключение темы"""
-    current_theme = request.session.get('theme', 'light')
-    request.session['theme'] = 'dark' if current_theme == 'light' else 'light'
-    request.session.modified = True
-    return redirect(request.META.get('HTTP_REFERER', 'home'))
+    current_theme = request.COOKIES.get('theme', 'light')
+    new_theme = 'dark' if current_theme == 'light' else 'light'
+
+    response = HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+    response.set_cookie('theme', new_theme, max_age=31536000, path='/')
+
+    return response
+
+
+@login_required
+def chat_room(request, room_name):
+    return render(request, 'catalog/chat.html', {
+        'room_name': room_name
+    })
